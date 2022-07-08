@@ -1,0 +1,364 @@
+zoom = 10		//拡大率
+screen 0 ,50 *zoom ,50 *zoom		//拡大画面
+screen 1 ,50 ,50 ,8					//実物大
+gsel 1,2
+screen 2 ,200 ,555					//リスト画面
+buffer 3
+screen 4
+gsel 4 ,-1
+buffer 5 ,50 *zoom ,50 *zoom
+screen 6 ,600 ,300					//肩調節窓
+gsel 6 ,-1
+onexit gosub*exit
+boon_list = {"
+首
+右肘
+左肘
+右手
+左手
+腰
+右膝間接
+左膝間接
+右足
+左足
+"}
+
+gsel 2
+pos 5,5 :objsize 190,440 :font "MSゴシック",40 :objmode 2
+listbox select_boon , 0 ,boon_list
+font "MSゴシック",20
+objsize 95,50
+button gosub "画像保存",*pic_save
+pos 100,445
+button gosub "画像選択",*pic_select
+pos 5 ,500
+button gosub "色変更",*color_select
+pos 100 ,500
+button gosub "肩調整",*shouder_pos_adjust_sub
+
+head_size = 10
+#define mq_zoom		*zoom
+
+neck_x			= 25
+neck_y			= 0 +head_size 
+right_elbow_x	= 35
+right_elbow_y	= 20
+left_elbow_x	= 15
+left_elbow_y	= 20
+right_hand_x	= 40
+right_hand_y	= 30
+left_hand_x		= 10
+left_hand_y		= 30
+waist_x			= 25
+waist_y			= 30
+right_knee_x	= 30
+right_knee_y	= 40
+left_knee_x		= 20
+left_knee_y		= 40
+right_foot_x	= 30
+right_foot_y	= 50
+left_foot_x		= 20
+left_foot_y		= 50
+right_shouder_den	= 2
+right_shouder_num	= 7
+left_shouder_den	= 2
+left_shouder_num	= 7
+right_shouder_x	= neck_x +((waist_x -neck_x) /right_shouder_num *right_shouder_den)
+right_shouder_y	= neck_y +((waist_y -neck_y) /right_shouder_num *right_shouder_den)
+left_shouder_x	= neck_x +((waist_x -neck_x) /left_shouder_num *left_shouder_den)
+left_shouder_y	= neck_y +((waist_y -neck_y) /left_shouder_num *left_shouder_den)
+
+repeat
+	gosub*key_sub
+	gosub*boon_sub
+	gosub*draw_sub
+await 16 :loop
+
+*draw_sub
+	redraw 0
+	
+	//拡大
+	gsel 0
+	color 255,255,255 :boxf
+	pos 0,0 :gcopy 5 ,0,0 ,50 mq_zoom ,50 mq_zoom
+	color 0,0,0 :line 0 ,ginfo_sy /2 ,ginfo_sx ,ginfo_sy /2 :line ginfo_sx/2 ,0 ,ginfo_sx/2 ,ginfo_sy
+	color 180,180,230 :line ginfo_sx /5*1 ,0 ,ginfo_sx /5*1 ,ginfo_sy :line ginfo_sx /5*4 ,0 ,ginfo_sx /5*4 ,ginfo_sy
+	color red,green,blue
+	line neck_x 		mq_zoom ,neck_y 		mq_zoom ,waist_x 		mq_zoom ,waist_y mq_zoom 												//胴体
+	line right_shouder_x mq_zoom,right_shouder_y mq_zoom,right_elbow_x 	mq_zoom ,right_elbow_y mq_zoom 								//右二
+	line right_elbow_x 	mq_zoom ,right_elbow_y 	mq_zoom ,right_hand_x	mq_zoom ,right_hand_y mq_zoom 						//右腕
+	line left_shouder_x	mq_zoom ,left_shouder_y	mq_zoom ,left_elbow_x 	mq_zoom ,left_elbow_y mq_zoom 								//左二
+	line left_elbow_x 	mq_zoom ,left_elbow_y 	mq_zoom ,left_hand_x 	mq_zoom ,left_hand_y mq_zoom 							//左腕
+	line waist_x 		mq_zoom ,waist_y 		mq_zoom ,right_knee_x 	mq_zoom ,right_knee_y mq_zoom 									//右腿
+	line right_knee_x 	mq_zoom ,right_knee_y 	mq_zoom ,right_foot_x 	mq_zoom ,right_foot_y mq_zoom 							//右脛
+	line waist_x 		mq_zoom ,waist_y 		mq_zoom ,left_knee_x 	mq_zoom ,left_knee_y mq_zoom 										//左腿
+	line left_knee_x 	mq_zoom ,left_knee_y 	mq_zoom ,left_foot_x 	mq_zoom ,left_foot_y mq_zoom 	//左脛
+	circle  (neck_x -(head_size/2)) mq_zoom 	,(neck_y -head_size) mq_zoom 	,(neck_x +(head_size/2)) mq_zoom ,neck_y mq_zoom ,1	//頭
+	color 255,255,255 :circle  (neck_x -(head_size/2)) mq_zoom 	+1,(neck_y -head_size) mq_zoom 	+1,(neck_x +(head_size/2)) mq_zoom -1,neck_y mq_zoom -1,1	//頭
+	
+	redraw 0
+	redraw 1
+	
+	//実物
+	gsel 1
+	color 255,255,255 :boxf
+	color red,green,blue
+	line neck_x 		 ,neck_y 		,waist_x 		 ,waist_y  												//胴体
+	line right_shouder_x ,right_shouder_y,right_elbow_x	 ,right_elbow_y  								//右二
+	line right_elbow_x 	 ,right_elbow_y	,right_hand_x	 ,right_hand_y  						//右腕
+	line left_shouder_x	 ,left_shouder_y,left_elbow_x 	 ,left_elbow_y  								//左二
+	line left_elbow_x 	 ,left_elbow_y 	,left_hand_x 	 ,left_hand_y  							//左腕
+	line waist_x 		 ,waist_y 		,right_knee_x 	 ,right_knee_y  									//右腿
+	line right_knee_x 	 ,right_knee_y 	,right_foot_x 	 ,right_foot_y  							//右脛
+	line waist_x 		 ,waist_y 		,left_knee_x 	 ,left_knee_y  										//左腿
+	line left_knee_x 	 ,left_knee_y 	,left_foot_x 	 ,left_foot_y 
+	circle  (neck_x -(head_size/2))  	,(neck_y -head_size)  	,(neck_x +(head_size/2))  ,neck_y  ,1	//頭
+	color 255,255,255 :circle  (neck_x -(head_size/2))  	+1,(neck_y -head_size)  	+1,(neck_x +(head_size/2))  -1,neck_y  -1,1	//頭
+	
+	
+	redraw 1
+	redraw 0
+	
+	//リスト画面
+	gsel 2
+	color 255,255,255 :boxf
+	color 0,0,0
+	pos 5,410
+	switch select_boon
+		case 0
+			mes "首"
+		swbreak
+		case 1
+			mes "右肘"
+		swbreak
+		case 2
+			mes "左肘"
+		swbreak
+		case 3
+			mes "右手"
+		swbreak
+		case 4
+			mes "左手"
+		swbreak
+		case 5
+			mes "腰"
+		swbreak
+		case 6
+			mes "右膝間接"
+		swbreak
+		case 7
+			mes "左膝間接"
+		swbreak
+		case 8
+			mes "右足"
+		swbreak
+		case 9
+			mes "左足"
+		swbreak
+	swend
+
+	redraw 1
+
+return
+
+*key_sub
+	getkey click		,1	//左クリック
+return
+
+*boon_sub
+	gsel 0
+	if click == 1 and ginfo_act == 0{
+	
+switch select_boon
+	case 0
+neck_x			= mousex /zoom
+neck_y			= mousey /zoom
+	swbreak
+	case 1
+right_elbow_x	= mousex /zoom
+right_elbow_y	= mousey /zoom
+	swbreak
+	case 2
+left_elbow_x	= mousex /zoom
+left_elbow_y	= mousey /zoom
+	swbreak
+	case 3
+right_hand_x	= mousex /zoom
+right_hand_y	= mousey /zoom
+swbreak
+	case 4
+left_hand_x		= mousex /zoom
+left_hand_y		= mousey /zoom
+	swbreak
+	case 5
+waist_x			= mousex /zoom
+waist_y			= mousey /zoom
+	swbreak
+	case 6
+right_knee_x	= mousex /zoom
+right_knee_y	= mousey /zoom
+	swbreak
+	case 7
+left_knee_x		= mousex /zoom
+left_knee_y		= mousey /zoom
+	swbreak
+	case 8
+right_foot_x	= mousex /zoom
+right_foot_y	= mousey /zoom
+	swbreak
+	case 9
+left_foot_x		= mousex /zoom
+left_foot_y		= mousey /zoom
+	swbreak
+	swend
+}
+if right_shouder_num == 0	:right_shouder_num = 1
+if left_shouder_num == 0	:left_shouder_num = 1
+right_shouder_x	= neck_x +int(double(waist_x -neck_x) /double(right_shouder_num) *double(right_shouder_den))
+right_shouder_y	= neck_y +int(double(waist_y -neck_y) /double(right_shouder_num) *double(right_shouder_den))
+left_shouder_x	= neck_x +int(double(waist_x -neck_x) /double(left_shouder_num) *double(left_shouder_den))
+left_shouder_y	= neck_y +int(double(waist_y -neck_y) /double(left_shouder_num) *double(left_shouder_den))
+
+return
+
+*pic_save
+	gsel 1
+	dialog "bmp",17,
+	if stat == 0{
+		dialog "正しく選択されませんでした",0
+		return
+	}
+	bmpsave refstr
+	dialog "「"+refstr+"」を保存しました"
+return
+
+*pic_select
+	dialog "背景として画像を使用しますか？",2
+	if stat == 7{
+		dialog "背景をリセットしますか？",2
+		if stat == 6{
+			buffer 5
+			return
+		}
+		if stat == 7{
+			return
+		}
+	}
+	if stat == 6{
+		dialog "画像を選択してください",0
+		dialog "bmp|jpg|png",16,"画像ファイル"
+		if stat == 0 :return
+		buffer 3:picload refstr
+		temp_x = ginfo_sx
+		temp_y = ginfo_sy
+		gosub*pic_trim
+	}
+return
+
+*pic_trim
+	screen 4 ,temp_x,temp_y ,8
+	point_x = 0
+	point_y = 0
+	size = 50
+	if temp_x != temp_y{
+		dialog "使用範囲（正方形）を選択してください",0
+		repeat
+			redraw 0
+			
+			color 255,255,255 :boxf
+			pos 0,0 :gcopy 3 ,0,0 ,temp_x,temp_y
+	
+			getkey click,1
+	
+			if click == 1 and select_mode == 0 and ginfo_act == 4{
+				point_x = mousex
+				point_y = mousey
+				select_mode == 1
+			}
+	
+			color 0,0,255
+			line point_x ,point_y ,point_x +size	,point_y		//上辺
+			line point_x ,point_y ,point_x 			,point_y +size	//左辺
+			line point_x +size ,point_y ,point_x +size ,point_y +size
+			line point_x ,point_y +size ,point_x +size ,point_y +size
+	
+			if select_mode == 1{
+				if mousex -point_x > mousey -point_y{
+					size = mousex -point_x
+				}else{
+					size =mousey -point_y
+				}
+			}
+		
+			redraw 1
+		
+			if click == 0 and select_mode == 1{
+				select_mode == 0
+				dialog "これで決定しますか？",2
+				if stat == 6 :break
+			}
+		
+		await 16 :loop
+	}else{
+		dialog "選択された画像が正方形であるため、拡大します"
+	}
+	
+	gsel 5
+	pos 0,0 :gzoom 50 mq_zoom,50 mq_zoom ,3 ,point_x ,point_y ,size,size ,1
+	
+	gsel 4,-1
+	
+return
+
+*color_select
+	dialog "棒人間の色を選択してください",0
+	dialog "",33
+	if stat == 0 :return
+	red = ginfo_r
+	green = ginfo_g
+	blue = ginfo_b
+return
+
+*shouder_pos_adjust_sub
+	gsel 6 ,1
+	color 0,0,0 :line ginfo_sx/2 ,0 ,ginfo_sx/2 ,130
+	color 0,0,150 :font "MSゴシック" ,60
+	pos 0,0 :mes "左肩" :pos ginfo_sx/2 ,0 :mes "右肩"
+	color 0,0,0 :font "MSゴシック" ,30 :objmode 0
+	pos 0,60 :mes "分子" :pos 90 ,60 :input left_shouder_den ,100,30 ,3
+	pos 0,95 :mes "分母" :pos 90 ,95 :input left_shouder_num ,100,30 ,3
+	pos ginfo_sx/2 ,60 :mes "分子" :pos ginfo_sx/2 +90 ,60 :input right_shouder_den ,100,30 ,3
+	pos ginfo_sx/2 ,95 :mes "分母" :pos ginfo_sx/2 +90 ,95 :input right_shouder_num ,100,30 ,3
+	line 0,130,ginfo_sx,130
+	pos 10,150 :objsize 100,40 :button gosub"完了",*shouder_pos_adjust_sub_a
+	temp_a = 0
+	click = 0
+	repeat
+		gosub*draw_sub
+		gosub*boon_sub
+		if temp_a == 1 :break
+	await 16 :loop
+	
+return
+
+*shouder_pos_adjust_sub_a
+	temp_a = 1
+	gsel 6,-1
+return
+
+*exit
+	dialog "作業を終了しますか？" ,3
+	if stat == 6{
+		end
+	}
+	if stat == 7{
+		return
+	}
+return
+
+/*
+・表記の左右と実質の左右は逆
+●7/18変更点概要
+	・中央線
+	・背景リセットの不具合改善
+	・1/5、4/5線
