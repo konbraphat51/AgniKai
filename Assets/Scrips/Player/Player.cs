@@ -21,6 +21,13 @@ public class Player : MonoBehaviour
         G=8
     }
 
+    protected Animator animator;
+
+    protected virtual void Start()
+    {
+        animator = this.GetComponent<Animator>();
+    }
+
     protected virtual void Update()
     {
         CheckKeys();
@@ -28,7 +35,7 @@ public class Player : MonoBehaviour
 
     private void CheckKeys()
     {
-        foreach(Keys k in Enum.GetValues(typeof(KeyCode))){
+        foreach(Keys k in Enum.GetValues(typeof(Keys))){
             bool former     = keyPressed[(int)k];
             bool current    = Input.GetKey(GetKeyCode(k));
             if(former == false && current == true)
