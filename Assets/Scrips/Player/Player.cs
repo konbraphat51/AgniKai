@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -23,6 +24,16 @@ public class Player : MonoBehaviour
         F=7,
         G=8
     }
+    //frames waited for another key until move conducted
+    [SerializeField] private int waitForAnotherKeyF = 7;
+    private UnityAction actionIfNothing;
+    private UnityAction<Keys> keyReception;     //called when another key
+    private int frameCountDown = 0;
+    //if true, don't conduct another action independently
+    protected bool isWaitingForAnotherKey { get; private set; } = false;
+
+    //parent for objects this player instantiate (ex.element generator/parent)
+    [SerializeField] protected GameObject prefabsParent;
 
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
@@ -37,6 +48,7 @@ public class Player : MonoBehaviour
     {
         CheckKeys();
         Look();
+        WaitForAnotherKey();
     }
 
     private void CheckKeys()
@@ -69,6 +81,38 @@ public class Player : MonoBehaviour
         {
             spriteRenderer.flipX = !shouldLookRight;
         }
+    }
+
+    //wait before taking actions for another key input
+    protected void StartWaitForAnotherKey(UnityAction actionIfNothing, UnityAction<Keys> keyReception)
+    {
+        //remember the action when no key input else
+        this.actionIfNothing = actionIfNothing;
+
+        this.keyReception = keyReception;
+
+        //count down until action start
+        frameCountDown = waitForAnotherKeyF;
+
+        //don't conduct another action independently
+        isWaitingForAnotherKey = true;
+    }
+
+    private void WaitForAnotherKey()
+    {
+        if (!isWaitingForAnotherKey) return;
+
+        frameCountDown--;
+
+        if(frameCountDown == 0)
+        {
+            isWaitingForAnotherKey = false;
+        }
+    }
+
+    private void OnAnotherKey(Keys k)
+    {
+        keyReception.Invoke(k);
     }
 
     private void OnKeyDown(Keys k)
@@ -106,6 +150,11 @@ public class Player : MonoBehaviour
     }
     private void OnKeyPushing(Keys k)
     {
+        if (isWaitingForAnotherKey)
+        {
+            OnAnotherKey(k);
+        }
+
         switch (k)
         {
             case Keys.W:

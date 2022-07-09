@@ -33,9 +33,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   number: 1
   shouldLookRight: 0
-  aniCshoot: BasicShoot
-  aniRunning: Running
+  waitForAnotherKeyF: 7
+  prefabsParent: {fileID: 0}
   runningSpeed: 0.02
+  feetY: -0.5
+  aniCshoot: Cshoot
+  aniRunning: Running
+  waterBeaconPrefab: {fileID: 1657439454818201681, guid: 1f50fd60f5c72bd45bb594fda82de4eb, type: 3}
+  waterGeneratorPrefab: {fileID: 1845583896111050957, guid: af180c84c63e8eb4a81cfc01cb1bc88b, type: 3}
 --- !u!1001 &4253161715921260867
 PrefabInstance:
   m_ObjectHideFlags: 0

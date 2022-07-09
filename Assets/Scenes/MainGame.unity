@@ -212,7 +212,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 201.55307, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -223,7 +223,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 100, y: 1000}
+  m_Size: {x: 503.10614, y: 1000}
   m_EdgeRadius: 0
 --- !u!1 &300864129
 GameObject:
@@ -498,7 +498,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -171.51164, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -509,7 +509,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 100, y: 1000}
+  m_Size: {x: 443.02322, y: 1000}
   m_EdgeRadius: 0
 --- !u!1 &934523517
 GameObject:
@@ -822,7 +822,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 85.272415}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -833,7 +833,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1600, y: 100}
+  m_Size: {x: 1600, y: 270.54486}
   m_EdgeRadius: 0
 --- !u!4 &1530203311 stripped
 Transform:
@@ -908,6 +908,10 @@ PrefabInstance:
       propertyPath: number
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6723295748126508460, guid: cca147de1ebbd784daf9d21552db9e01, type: 3}
+      propertyPath: prefabsParent
+      value: 
+      objectReference: {fileID: 934523517}
     - target: {fileID: 8422435839987039349, guid: cca147de1ebbd784daf9d21552db9e01, type: 3}
       propertyPath: m_Mass
       value: 0.052415222
@@ -1010,6 +1014,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6723295748126508460, guid: cca147de1ebbd784daf9d21552db9e01, type: 3}
+      propertyPath: prefabsParent
+      value: 
+      objectReference: {fileID: 934523517}
     - target: {fileID: 8422435839987039349, guid: cca147de1ebbd784daf9d21552db9e01, type: 3}
       propertyPath: m_Mass
       value: 0.052415222

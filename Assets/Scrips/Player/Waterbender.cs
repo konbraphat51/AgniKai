@@ -3,10 +3,18 @@ using UnityEngine;
 
 public class Waterbender : Player
 {
+    [Header("Basical ability")]
+    [SerializeField] private float runningSpeed = 5.0f;
+    [Tooltip("adjustment of the position for generating (going to be plused)")]
+    [SerializeField] private float feetY = 50.0f;
+
+    [Header("Animator Events/Triggers")]
     [SerializeField] private string aniCshoot = "BasicShoot";
     [SerializeField] private string aniRunning = "Running";
 
-    [SerializeField] private float runningSpeed = 5.0f;
+    [Header("Prefabs")]
+    [SerializeField] private GameObject waterBeaconPrefab;
+    [SerializeField] private GameObject waterGeneratorPrefab;
 
     public enum State
     {
@@ -14,12 +22,8 @@ public class Waterbender : Player
         running,
         Cshoot
     }
-    public State state
-    {
-        //cannot be changed by outsider class
-        private set;
-        get;
-    } = State.standing;
+    //cannot be changed by outsider class
+    public State state { private set; get;} = State.standing;
 
     private void Run(Directions direction)
     {
@@ -49,6 +53,98 @@ public class Waterbender : Player
         animator.SetTrigger(aniCshoot);
     }
 
+    //called from animator
+    private void Cshoot(int step)
+    {
+        float beaconingForce = 500.0f;
+
+        Vector3 generatingPosition
+                = new Vector3(this.transform.position.x,
+                    this.transform.position.y + (feetY),
+                    this.transform.position.z);
+        GameObject generatorObject = null;
+        GameObject beaconObject = null;
+        
+        //actual move
+        switch (step)
+        {
+            //first shot
+            case 1:
+                generatorObject = GenerateWaterGenerator(
+                    generatingPosition,
+                    true,
+                    30,
+                    1.0f);
+                beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
+                beaconObject.GetComponent
+                    <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
+                break;
+
+            //second shot
+            case 2:
+                generatorObject = GenerateWaterGenerator(
+                    generatingPosition,
+                    true,
+                    30,
+                    1.0f);
+                beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
+                beaconObject.GetComponent
+                    <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
+                break;
+
+            //animation ended
+            case 3:
+                ChangeState(State.standing);
+                break;
+        }
+
+        //set the elements' parents
+        if(generatorObject != null)
+        {
+            generatorObject.GetComponent<ElementGenerator>().parentObject
+                = beaconObject;
+            ElementParentBeacon beacon = beaconObject.GetComponent<ElementParentBeacon>();
+            beacon.projectionXSpeed = 10.0f;
+            beacon.xMutiplier = 0.2f;
+            beacon.yMutiplier = 30.0f;
+            beacon.toRight = true;
+        }
+    }
+
+    private GameObject GenerateWaterGenerator
+                                (Vector3 globalPosition,
+                                bool hasLife,
+                                int lifeSpanF,
+                                float generatePossibility)
+    {
+        GameObject targetObject = Instantiate(waterGeneratorPrefab,
+            Vector3.zero,
+            Quaternion.identity,
+            prefabsParent.transform);
+        targetObject.transform.position = globalPosition;
+        ElementGenerator target = targetObject.GetComponent<ElementGenerator>();
+        target.hasLife = hasLife;
+        target.lifeLeftF = lifeSpanF;
+        target.generatePossibility = generatePossibility;
+
+        return targetObject;
+    }
+
+    private GameObject GenerateWaterBeacon
+                                (Vector3 globalPosition,
+                                float force)
+    {
+        GameObject targetObject = Instantiate(waterBeaconPrefab,
+              Vector3.zero,
+              Quaternion.identity,
+              prefabsParent.transform);
+        targetObject.transform.position = globalPosition;
+        ElementParentBeacon target = targetObject.GetComponent<ElementParentBeacon>();
+        target.beaconingForce = force;
+
+        return targetObject;
+    }
+
     private bool CanMove()
     {
         switch (state)
@@ -59,6 +155,11 @@ public class Waterbender : Player
             default:
                 return false;
         }
+    }
+
+    private bool CanAction()
+    {
+        return CanMove() && !isWaitingForAnotherKey;
     }
 
     private void ChangeState(State nextState)
@@ -85,7 +186,7 @@ public class Waterbender : Player
         base.OnKeyDownC();
 
         //Cshoot
-        if (CanMove())
+        if (CanAction())
         {
             StartCshoot();
             ChangeState(State.Cshoot);
