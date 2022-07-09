@@ -34,7 +34,7 @@ MonoBehaviour:
   number: 1
   aniCshoot: BasicShoot
   aniRunning: Running
-  runningSpeed: 0.04
+  runningSpeed: 0.05
 --- !u!1001 &4253161715921260867
 PrefabInstance:
   m_ObjectHideFlags: 0

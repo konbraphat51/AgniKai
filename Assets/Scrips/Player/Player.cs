@@ -5,6 +5,8 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private int number = 1;
 
+    public bool shouldLookRight = false;
+
     //w,a,d,s, c,v,b,f,g
     private int KeyN = 9;
     protected bool[] keyPressed = new bool[9];
@@ -40,14 +42,18 @@ public class Player : MonoBehaviour
             bool current    = Input.GetKey(GetKeyCode(k));
             if(former == false && current == true)
             {
+                //The moment down
                 OnKeyDown(k);
                 keyPressed[(int)k] = current;
             }else if(former == true && current == true)
             {
+                //keep pushing
                 OnKeyPushing(k);
             }else if(former == true && current == false)
             {
+                //The moment up
                 OnKeyUp(k);
+                keyPressed[(int)k] = current;
             }
         }
     }
@@ -187,7 +193,7 @@ public class Player : MonoBehaviour
                     case Keys.A:
                         return KeyCode.K;
                     case Keys.D:
-                        return KeyCode.Semicolon;
+                        return KeyCode.Equals;
                     case Keys.S:
                         return KeyCode.L;
                     case Keys.C:
@@ -197,7 +203,7 @@ public class Player : MonoBehaviour
                     case Keys.B:
                         return KeyCode.RightShift;
                     case Keys.F:
-                        return KeyCode.Colon;
+                        return KeyCode.Semicolon;
                     case Keys.G:
                         return KeyCode.RightBracket;
                 }

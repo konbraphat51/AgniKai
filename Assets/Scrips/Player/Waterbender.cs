@@ -57,6 +57,7 @@ public class Waterbender : Player
 
     private void ChangeState(State nextState)
     {
+
         //only when different state
         if (state == nextState) return;
 
@@ -91,7 +92,6 @@ public class Waterbender : Player
         //Run
         if (CanMove())
         {
-            Debug.Log("a");
             Run(Directions.left);
             ChangeState(State.running);
         }
