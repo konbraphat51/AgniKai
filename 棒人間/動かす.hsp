@@ -14,7 +14,7 @@ gsel 0 //描画先をメイン窓に移行
 
 buf_num = 1		//表示中の画像ファイル
 frame_start = 0	//アニメ始点
-anime_time = 48	//周期の時間
+anime_time = 28	//周期の時間
 
 repeat
 	redraw 0	//描画ストップ

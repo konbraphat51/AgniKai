@@ -33,6 +33,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   number: 1
   aniCshoot: BasicShoot
+  aniRunning: Running
+  runningSpeed: 0.04
 --- !u!1001 &4253161715921260867
 PrefabInstance:
   m_ObjectHideFlags: 0
