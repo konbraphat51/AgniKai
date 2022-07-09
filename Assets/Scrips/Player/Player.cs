@@ -5,7 +5,8 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private int number = 1;
 
-    public bool shouldLookRight = false;
+    public bool shouldLookRight = true;
+    protected bool hasLookPreference = false;
 
     //w,a,d,s, c,v,b,f,g
     private int KeyN = 9;
@@ -24,15 +25,18 @@ public class Player : MonoBehaviour
     }
 
     protected Animator animator;
+    protected SpriteRenderer spriteRenderer;
 
     protected virtual void Start()
     {
         animator = this.GetComponent<Animator>();
+        spriteRenderer = this.GetComponent<SpriteRenderer>();
     }
 
     protected virtual void Update()
     {
         CheckKeys();
+        Look();
     }
 
     private void CheckKeys()
@@ -55,6 +59,15 @@ public class Player : MonoBehaviour
                 OnKeyUp(k);
                 keyPressed[(int)k] = current;
             }
+        }
+    }
+
+    //look at the opponent (this.shouldLookRight decided by BattleManager)
+    private void Look()
+    {
+        if (!hasLookPreference)
+        {
+            spriteRenderer.flipX = !shouldLookRight;
         }
     }
 

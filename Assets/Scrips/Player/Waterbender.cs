@@ -25,14 +25,20 @@ public class Waterbender : Player
     {
         //animation
         animator.SetBool(aniRunning, true);
+        hasLookPreference = true;
 
         //move
         switch (direction)
         {
             case Directions.right:
+                //animation
+                spriteRenderer.flipX = false;
+                
                 transform.position += new Vector3(runningSpeed, 0, 0);
                 break;
             case Directions.left:
+                spriteRenderer.flipX = true;
+
                 transform.position += new Vector3(-runningSpeed, 0, 0);
                 break;
         }
@@ -67,6 +73,7 @@ public class Waterbender : Player
             case State.running:
                 //animation
                 animator.SetBool(aniRunning, false);
+                hasLookPreference = false;
                 break;
         }
 
