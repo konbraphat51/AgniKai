@@ -2,12 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
+//sprites always must look right
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int number = 1;
+    [SerializeField] protected int number = 1;
 
     public bool shouldLookRight = true;
     protected bool hasLookPreference = false;
+    protected bool lookingAtRight = false;
 
     //w,a,d,s, c,v,b,f,g
     private int KeyN = 9;
@@ -79,8 +81,9 @@ public class Player : MonoBehaviour
     {
         if (!hasLookPreference)
         {
-            spriteRenderer.flipX = !shouldLookRight;
+            lookingAtRight = shouldLookRight;
         }
+        spriteRenderer.flipX = !lookingAtRight;
     }
 
     //wait before taking actions for another key input

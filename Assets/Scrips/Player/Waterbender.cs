@@ -36,12 +36,12 @@ public class Waterbender : Player
         {
             case Directions.right:
                 //animation
-                spriteRenderer.flipX = false;
+                lookingAtRight = true;
                 
                 transform.position += new Vector3(runningSpeed, 0, 0);
                 break;
             case Directions.left:
-                spriteRenderer.flipX = true;
+                lookingAtRight = false;
 
                 transform.position += new Vector3(-runningSpeed, 0, 0);
                 break;
@@ -51,12 +51,14 @@ public class Waterbender : Player
     private void StartCshoot()
     {
         animator.SetTrigger(aniCshoot);
+
+        hasLookPreference = true;
     }
 
     //called from animator
     private void Cshoot(int step)
     {
-        float beaconingForce = 500.0f;
+        float beaconingForce = 1000.0f;
 
         Vector3 generatingPosition
                 = new Vector3(this.transform.position.x,
@@ -74,7 +76,7 @@ public class Waterbender : Player
                     generatingPosition,
                     true,
                     30,
-                    1.0f);
+                    2.0f);
                 beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
                 beaconObject.GetComponent
                     <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
@@ -86,7 +88,7 @@ public class Waterbender : Player
                     generatingPosition,
                     true,
                     30,
-                    1.0f);
+                    2.0f);
                 beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
                 beaconObject.GetComponent
                     <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
@@ -95,19 +97,22 @@ public class Waterbender : Player
             //animation ended
             case 3:
                 ChangeState(State.standing);
+                hasLookPreference = false;
                 break;
         }
 
         //set the elements' parents
         if(generatorObject != null)
         {
-            generatorObject.GetComponent<ElementGenerator>().parentObject
-                = beaconObject;
+            ElementGenerator generator = generatorObject.GetComponent<ElementGenerator>();
+            generator.parentObject = beaconObject;
             ElementParentBeacon beacon = beaconObject.GetComponent<ElementParentBeacon>();
-            beacon.projectionXSpeed = 10.0f;
+            beacon.projectionXSpeed = 13.0f;
             beacon.xMutiplier = 0.2f;
             beacon.yMutiplier = 30.0f;
-            beacon.toRight = true;
+            beacon.toRight = lookingAtRight;
+            beacon.hasLife = true;
+            beacon.lifeLeft = 400;
         }
     }
 
@@ -126,6 +131,7 @@ public class Waterbender : Player
         target.hasLife = hasLife;
         target.lifeLeftF = lifeSpanF;
         target.generatePossibility = generatePossibility;
+        target.playerN = this.number;
 
         return targetObject;
     }
@@ -141,6 +147,7 @@ public class Waterbender : Player
         targetObject.transform.position = globalPosition;
         ElementParentBeacon target = targetObject.GetComponent<ElementParentBeacon>();
         target.beaconingForce = force;
+        target.playerN = this.number;
 
         return targetObject;
     }

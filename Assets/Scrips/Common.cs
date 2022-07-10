@@ -12,6 +12,21 @@ namespace Common
         up,
         down
     }
+
+    public static class TagCommon
+    {
+        public static bool Contains(string targetTag, string targetString)
+        {
+            if (targetTag.Contains(targetString))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 }
 
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Common;
 
 //adding force towards this beacon
 public class ElementParentBeacon : ElementParent
@@ -27,4 +28,7 @@ public class ElementParentBeacon : ElementParent
             obj.GetComponent<Rigidbody2D>().AddForce(direction * beaconingForce);
         }
     }
+
+    
+
 }

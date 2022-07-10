@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Common;
 
 public class ElementParent : MonoBehaviour
 {
@@ -18,11 +19,17 @@ public class ElementParent : MonoBehaviour
     
     private Vector3 rootLocalPosition;
 
+    public bool hasLife = false;
+    public int lifeLeft = 100;
+    public bool destroyHittingWall = false;
+
     //consts (not making serializefield because to changed by code)
     public bool toRight;
     public float projectionXSpeed = 10.0f;
     public float xMutiplier = 0.2f;
     public float yMutiplier = 1.0f;
+
+    public int playerN = 1;
 
     private Animator animator;
 
@@ -38,6 +45,12 @@ public class ElementParent : MonoBehaviour
             case State.logarithm:
                 AnimateLogarithm();
                 break;
+        }
+
+        lifeLeft--;
+        if(hasLife && lifeLeft <= 0)
+        {
+            Destroy(this.gameObject);
         }
     }
 
@@ -73,5 +86,15 @@ public class ElementParent : MonoBehaviour
         //apply the position
         this.transform.localPosition
             = new Vector3(calculatedX, calculatedY, this.transform.position.z);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        string colliderTag = collision.gameObject.tag;
+
+        if(destroyHittingWall && TagCommon.Contains(colliderTag, "Wall"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

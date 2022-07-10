@@ -11,6 +11,8 @@ public class ElementGenerator : MonoBehaviour
     [Tooltip(">1.0 is able; 5.0 means 5 per flame")]
     [SerializeField] public float generatePossibility = 1.0f;
 
+    public int playerN = 1;
+
     void Update()
     {
         Generate();
@@ -39,6 +41,8 @@ public class ElementGenerator : MonoBehaviour
                 Quaternion.identity,
                 parentObject.transform);
             elementObject.transform.position = this.transform.position;
+            Element element = elementObject.GetComponent<Element>();
+            element.playerN = this.playerN;
         }
     }
 }
