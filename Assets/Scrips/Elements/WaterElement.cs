@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class WaterElement : Element
+public class WaterElement : ElementBullet
 {
     void Update()
     {

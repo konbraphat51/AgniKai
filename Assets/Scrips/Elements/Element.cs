@@ -22,18 +22,6 @@ public class Element : MonoBehaviour
         GameObject colliderObject = collision.gameObject;
         string colliderTag = collision.gameObject.tag;
 
-        Debug.Log(colliderTag);
-
-        //Bullet vs Bullet
-        if (TagCommon.Contains(this.gameObject.tag, "Bullet")
-            && TagCommon.Contains(colliderTag, "Bullet")
-            && (this.playerN != colliderObject.GetComponent<Element>().playerN))
-        {
-            
-            Destroy(colliderObject);
-            Destroy(this.gameObject);
-        }
-
         // vs wall
         if (TagCommon.Contains(colliderTag, "Wall"))
         {

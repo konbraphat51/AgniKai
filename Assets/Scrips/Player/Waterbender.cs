@@ -58,7 +58,7 @@ public class Waterbender : Player
     //called from animator
     private void Cshoot(int step)
     {
-        float beaconingForce = 1000.0f;
+        float beaconingForce = 100.0f;
 
         Vector3 generatingPosition
                 = new Vector3(this.transform.position.x,
@@ -107,7 +107,7 @@ public class Waterbender : Player
             ElementGenerator generator = generatorObject.GetComponent<ElementGenerator>();
             generator.parentObject = beaconObject;
             ElementParentBeacon beacon = beaconObject.GetComponent<ElementParentBeacon>();
-            beacon.projectionXSpeed = 13.0f;
+            beacon.projectionXSpeed = 7.0f;
             beacon.xMutiplier = 0.2f;
             beacon.yMutiplier = 30.0f;
             beacon.toRight = lookingAtRight;
