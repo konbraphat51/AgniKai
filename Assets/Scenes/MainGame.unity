@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 300864131}
   m_Layer: 0
   m_Name: BackGround
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -962,10 +962,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 934523518}
     m_Modifications:
-    - target: {fileID: 508486895674971997, guid: cca147de1ebbd784daf9d21552db9e01, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 8b9c4e904a4605f4fb2309fb78265e4a, type: 2}
     - target: {fileID: 1013164084602344673, guid: cca147de1ebbd784daf9d21552db9e01, type: 3}
       propertyPath: m_Name
       value: Blue

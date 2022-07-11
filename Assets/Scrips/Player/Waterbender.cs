@@ -11,6 +11,7 @@ public class Waterbender : Player
     [Header("Animator Events/Triggers")]
     [SerializeField] private string aniCshoot = "BasicShoot";
     [SerializeField] private string aniRunning = "Running";
+    [SerializeField] private string aniJumping1 = "Jumping1";
 
     [Header("Prefabs")]
     [SerializeField] private GameObject waterBeaconPrefab;
@@ -20,7 +21,8 @@ public class Waterbender : Player
     {
         standing,
         running,
-        Cshoot
+        Cshoot,
+        jumping1
     }
     //cannot be changed by outsider class
     public State state { private set; get;} = State.standing;
@@ -48,9 +50,25 @@ public class Waterbender : Player
         }
     }
 
+    private void StartJumping1()
+    {
+        //consts
+        float jumpingForce = 15f;
+
+        ChangeState(State.jumping1);
+
+        //animation
+        animator.SetTrigger(aniJumping1);
+
+        //add force
+        Vector3 jumpingVector = new Vector3(0, 1, 0) * jumpingForce;
+        this.gameObject.GetComponent<Rigidbody2D>().AddForce(jumpingVector);
+    }
+
     private void StartCshoot()
     {
         animator.SetTrigger(aniCshoot);
+        ChangeState(State.Cshoot);
 
         hasLookPreference = true;
     }
@@ -58,8 +76,19 @@ public class Waterbender : Player
     //called from animator
     private void Cshoot(int step)
     {
+        //consts
         float beaconingForce = 100.0f;
+        int generatorLife = 30;
+        float generatingRate = 2.0f;
+        float projectionXSpeed = 7.0f;
+        float xMutiplier = 0.2f;
+        float yMutiplier = 30.0f;
+        bool toRight = lookingAtRight;
+        bool hasLife = true;
+        int elementLifeLeft = 400;
 
+
+        //where generator set
         Vector3 generatingPosition
                 = new Vector3(this.transform.position.x,
                     this.transform.position.y + (feetY),
@@ -75,8 +104,8 @@ public class Waterbender : Player
                 generatorObject = GenerateWaterGenerator(
                     generatingPosition,
                     true,
-                    30,
-                    2.0f);
+                    generatorLife,
+                    generatingRate);
                 beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
                 beaconObject.GetComponent
                     <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
@@ -87,8 +116,8 @@ public class Waterbender : Player
                 generatorObject = GenerateWaterGenerator(
                     generatingPosition,
                     true,
-                    30,
-                    2.0f);
+                    generatorLife,
+                    generatingRate);
                 beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
                 beaconObject.GetComponent
                     <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
@@ -107,12 +136,12 @@ public class Waterbender : Player
             ElementGenerator generator = generatorObject.GetComponent<ElementGenerator>();
             generator.parentObject = beaconObject;
             ElementParentBeacon beacon = beaconObject.GetComponent<ElementParentBeacon>();
-            beacon.projectionXSpeed = 7.0f;
-            beacon.xMutiplier = 0.2f;
-            beacon.yMutiplier = 30.0f;
-            beacon.toRight = lookingAtRight;
-            beacon.hasLife = true;
-            beacon.lifeLeft = 400;
+            beacon.projectionXSpeed = projectionXSpeed;
+            beacon.xMutiplier = xMutiplier;
+            beacon.yMutiplier = yMutiplier;
+            beacon.toRight = toRight;
+            beacon.hasLife = hasLife;
+            beacon.lifeLeft = elementLifeLeft;
         }
     }
 
@@ -164,6 +193,8 @@ public class Waterbender : Player
         }
     }
 
+    //for new actions/attack
+    //(for not triggering isWaitingForAnotherKey
     private bool CanAction()
     {
         return CanMove() && !isWaitingForAnotherKey;
@@ -196,7 +227,15 @@ public class Waterbender : Player
         if (CanAction())
         {
             StartCshoot();
-            ChangeState(State.Cshoot);
+        }
+    }
+
+    protected override void OnKeyDownW()
+    {
+        base.OnKeyDownW();
+
+        if (CanMove()) {
+            StartJumping1();
         }
     }
 

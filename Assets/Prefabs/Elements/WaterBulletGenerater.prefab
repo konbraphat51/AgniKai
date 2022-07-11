@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5170870615611689430}
   - component: {fileID: -3938771671754860313}
   m_Layer: 0
-  m_Name: WaterGenerater
+  m_Name: WaterBulletGenerater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

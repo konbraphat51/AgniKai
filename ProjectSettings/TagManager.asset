@@ -7,6 +7,7 @@ TagManager:
   - Element
   - Wall
   - ElementBullet
+  - Ground
   layers:
   - Default
   - TransparentFX
