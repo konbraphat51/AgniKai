@@ -1,4 +1,5 @@
 using System;
+using Common;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
 
+    protected Directions direction;
+
     protected virtual void Start()
     {
         animator = this.GetComponent<Animator>();
@@ -48,6 +51,8 @@ public class Player : MonoBehaviour
 
     protected virtual void Update()
     {
+        direction = Directions.none;
+
         CheckKeys();
         Look();
         WaitForAnotherKey();
@@ -295,8 +300,12 @@ public class Player : MonoBehaviour
     protected virtual void OnKeyDownG() { }
 
     protected virtual void OnKeyPushingW() { }
-    protected virtual void OnKeyPushingA() { }
-    protected virtual void OnKeyPushingD() { }
+    protected virtual void OnKeyPushingA() {
+        direction = Directions.left;
+    }
+    protected virtual void OnKeyPushingD() {
+        direction = Directions.right;
+    }
     protected virtual void OnKeyPushingS() { }
     protected virtual void OnKeyPushingC() { }
     protected virtual void OnKeyPushingV() { }

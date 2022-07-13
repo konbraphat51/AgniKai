@@ -43,9 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc57895092e013458507c8e9f5ef06f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elementPrefab: {fileID: 0}
+  elementPrefab: {fileID: 3226912336126210477, guid: acf3ca3484cba6e4998772f184994644, type: 3}
   parentObject: {fileID: 0}
   hasLife: 1
   lifeLeftF: 100
   generatePossibility: 1
+  projectionSpeed: 10
+  isElementHeavy: 0
+  heavyGravity: 8
+  option: 0
   playerN: 1

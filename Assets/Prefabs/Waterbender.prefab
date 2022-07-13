@@ -39,8 +39,10 @@ MonoBehaviour:
   feetY: -0.5
   aniCshoot: Cshoot
   aniRunning: Running
+  aniJumping1: Jumping1
   waterBeaconPrefab: {fileID: 1657439454818201681, guid: 1f50fd60f5c72bd45bb594fda82de4eb, type: 3}
-  waterGeneratorPrefab: {fileID: 1845583896111050957, guid: af180c84c63e8eb4a81cfc01cb1bc88b, type: 3}
+  waterGeneratorPrefab: {fileID: 8067463342284548168, guid: 99ddae1c9002686459e3e7cee69efe28, type: 3}
+  waterBulletGeneratorPrefab: {fileID: 1845583896111050957, guid: af180c84c63e8eb4a81cfc01cb1bc88b, type: 3}
 --- !u!1001 &4253161715921260867
 PrefabInstance:
   m_ObjectHideFlags: 0

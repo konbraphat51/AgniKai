@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace Common
 {
-    enum Directions
+    public enum Directions
     {
+        none,
         right,
         left,
         up,
@@ -26,6 +27,11 @@ namespace Common
                 return false;
             }
         }
+    }
+
+    enum WaterElementType { 
+        normal,
+        bullet
     }
 }
 

@@ -12,10 +12,12 @@ public class Waterbender : Player
     [SerializeField] private string aniCshoot = "BasicShoot";
     [SerializeField] private string aniRunning = "Running";
     [SerializeField] private string aniJumping1 = "Jumping1";
+    [SerializeField] private string aniJumping1State = "Jumping1State";
 
     [Header("Prefabs")]
     [SerializeField] private GameObject waterBeaconPrefab;
     [SerializeField] private GameObject waterGeneratorPrefab;
+    [SerializeField] private GameObject waterBulletGeneratorPrefab;
 
     public enum State
     {
@@ -27,7 +29,23 @@ public class Waterbender : Player
     //cannot be changed by outsider class
     public State state { private set; get;} = State.standing;
 
-    private void Run(Directions direction)
+    private GameObject generatorAttached;
+
+    private int detailState = 0;
+
+    protected override void Update()
+    {
+        base.Update();
+
+        switch (state)
+        {
+            case State.jumping1:
+                UpdateJumping1();
+                break;
+        }
+    }
+
+    private void Run()
     {
         //animation
         animator.SetBool(aniRunning, true);
@@ -54,15 +72,90 @@ public class Waterbender : Player
     {
         //consts
         float jumpingForce = 15f;
-
+        
+        //don't be front
         ChangeState(State.jumping1);
 
         //animation
+        detailState = 1;
         animator.SetTrigger(aniJumping1);
+        animator.SetInteger(aniJumping1State, detailState);
 
         //add force
         Vector3 jumpingVector = new Vector3(0, 1, 0) * jumpingForce;
         this.gameObject.GetComponent<Rigidbody2D>().AddForce(jumpingVector);
+
+        //effect water element
+        generatorAttached = GenerateWaterGenerator(
+            this.transform.position,
+            false,
+            1,
+            0.5f,
+            WaterElementType.normal);
+            //comew along
+        generatorAttached.transform.parent = this.transform;
+        generatorAttached.transform.localPosition
+            = new Vector3(0, feetY, 0);
+        ElementGenerator generator = generatorAttached.GetComponent<ElementGenerator>();
+        generator.option = ElementGenerator.Option.spreadRandom;
+        generator.parentObject = this.transform.parent.gameObject;
+        generator.isElementHeavy = true;
+    }
+
+    private void Jumping1(int step)
+    {
+        switch (step)
+        {
+            case 1:
+                //rising animation ended
+                break;
+        }
+    }
+
+    private void UpdateJumping1()
+    {
+        float horizontalForce = 0.05f;
+
+        //animation
+        float vy = this.GetComponent<Rigidbody2D>().velocity.y;
+        if (detailState == 1 && vy < 0)
+        {
+            detailState = 2;
+            animator.SetInteger(aniJumping1State, detailState);
+            Destroy(generatorAttached);
+        }
+        else if(detailState == 2 && vy == 0)
+        {
+            EndJumping1();
+        }
+        //horizontal
+        if (direction != Directions.none)
+        {
+            Rigidbody2D rigid = this.GetComponent<Rigidbody2D>();
+            switch (direction)
+            {
+                case Directions.right:
+                    rigid.AddForce(new Vector3(horizontalForce, 0, 0));
+                    break;
+                case Directions.left:
+                    rigid.AddForce(new Vector3(-horizontalForce, 0, 0));
+                    break;
+            }
+        }
+
+    }
+
+    private void EndJumping1()
+    {
+        //state
+        ChangeState(State.standing);
+
+        //animation
+        animator.SetInteger(aniJumping1State, 0);
+
+        //movement: stop the horizontal movement during jumping
+        this.GetComponent<Rigidbody2D>().velocity
+            = new Vector3(0, 0, 0);
     }
 
     private void StartCshoot()
@@ -105,7 +198,8 @@ public class Waterbender : Player
                     generatingPosition,
                     true,
                     generatorLife,
-                    generatingRate);
+                    generatingRate,
+                    WaterElementType.bullet);
                 beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
                 beaconObject.GetComponent
                     <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
@@ -117,7 +211,8 @@ public class Waterbender : Player
                     generatingPosition,
                     true,
                     generatorLife,
-                    generatingRate);
+                    generatingRate,
+                    WaterElementType.bullet);
                 beaconObject = GenerateWaterBeacon(generatingPosition, beaconingForce);
                 beaconObject.GetComponent
                     <ElementParentBeacon>().Animate(ElementParent.Animation.logarithm);
@@ -149,12 +244,27 @@ public class Waterbender : Player
                                 (Vector3 globalPosition,
                                 bool hasLife,
                                 int lifeSpanF,
-                                float generatePossibility)
+                                float generatePossibility,
+                                WaterElementType type)
     {
-        GameObject targetObject = Instantiate(waterGeneratorPrefab,
-            Vector3.zero,
-            Quaternion.identity,
-            prefabsParent.transform);
+        GameObject targetObject = null;
+        switch (type)
+        {
+            case WaterElementType.normal:
+                targetObject = Instantiate(waterGeneratorPrefab,
+                    Vector3.zero,
+                    Quaternion.identity,
+                    prefabsParent.transform);
+                break;
+
+            case WaterElementType.bullet:
+                targetObject = Instantiate(waterBulletGeneratorPrefab,
+                    Vector3.zero,
+                    Quaternion.identity,
+                    prefabsParent.transform);
+                break;
+        }
+        
         targetObject.transform.position = globalPosition;
         ElementGenerator target = targetObject.GetComponent<ElementGenerator>();
         target.hasLife = hasLife;
@@ -246,7 +356,7 @@ public class Waterbender : Player
         //Run
         if (CanMove())
         {
-            Run(Directions.left);
+            Run();
             ChangeState(State.running);
         }
     }
@@ -258,7 +368,7 @@ public class Waterbender : Player
         //Run
         if (CanMove())
         {
-            Run(Directions.right);
+            Run();
             ChangeState(State.running);
         }
     }

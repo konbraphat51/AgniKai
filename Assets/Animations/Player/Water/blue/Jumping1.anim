@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Running
+  m_Name: Jumping1
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,13 +20,13 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: 4a84e237fd41c9e4bb6e53a96a892b01, type: 3}
+      value: {fileID: 21300000, guid: 395f460cff0c5e443b9f12bc3f016252, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: 87eba7a7502c0424c89876aba129af78, type: 3}
+      value: {fileID: 21300000, guid: acd99a28554d9534e9ebc7f90cf021fa, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 624fcbc2762d07b4c87e828c95c8a284, type: 3}
+      value: {fileID: 21300000, guid: db29deb5956d69b46be067cc16d40582, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: dde593b6f47a60c4f80c0c7ede1a379e, type: 3}
+      value: {fileID: 21300000, guid: 9fb0e7f7b6882c9489edd23a65a14456, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,10 +46,10 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 4a84e237fd41c9e4bb6e53a96a892b01, type: 3}
-    - {fileID: 21300000, guid: 87eba7a7502c0424c89876aba129af78, type: 3}
-    - {fileID: 21300000, guid: 624fcbc2762d07b4c87e828c95c8a284, type: 3}
-    - {fileID: 21300000, guid: dde593b6f47a60c4f80c0c7ede1a379e, type: 3}
+    - {fileID: 21300000, guid: 395f460cff0c5e443b9f12bc3f016252, type: 3}
+    - {fileID: 21300000, guid: acd99a28554d9534e9ebc7f90cf021fa, type: 3}
+    - {fileID: 21300000, guid: db29deb5956d69b46be067cc16d40582, type: 3}
+    - {fileID: 21300000, guid: 9fb0e7f7b6882c9489edd23a65a14456, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -60,7 +60,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -74,4 +74,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.25
+    functionName: Jumping1
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 1
+    messageOptions: 0
