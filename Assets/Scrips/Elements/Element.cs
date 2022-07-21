@@ -13,29 +13,50 @@ public class ElementSettings
     public bool rigid = false;      //has rigidbody2D
     public bool collidable = true; //destroy at colliding with another collidable
     public bool hasLife = true;
+    public bool destroyHittingWall = true;
+    public Element.Option option = Element.Option.quiet;
 
     ////parameters
     //element life
     public int lifeLeft = 50;
     //bullet
     public float damageToPlayer = 1.0f;
-
-    public bool destroyHittingWall = true;
+    //option
+    public float optionA = 1f;
 }
 
 public class Element : MonoBehaviour
 {
+    public enum Option
+    {
+        quiet,
+        spreadRandom    //rigidbody needed
+    }
+
     public ElementSettings settings = new ElementSettings();
 
     int hp;
 
     private void Start()
     {
+        //init life
         hp = settings.lifeLeft;
 
+        //init rigid
         if (settings.rigid)
         {
             gameObject.AddComponent<Rigidbody2D>();
+        }
+
+        switch (settings.option)
+        {
+            case Option.spreadRandom:
+                Debug.Log(settings.optionA);
+                //REQUIRE: rigidbody
+                Vector3 speed = new Vector3(Random.Range(0f, settings.optionA), 0f, 0f);
+                Quaternion angle = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
+                gameObject.GetComponent<Rigidbody2D>().velocity = angle * speed;
+                break;
         }
     }
 
@@ -50,11 +71,6 @@ public class Element : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
-    }
-
-    public virtual void Damage(int damage)
-    {
-
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)

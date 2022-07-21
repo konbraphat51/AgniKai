@@ -9,8 +9,6 @@ public class ElementGeneratorSettings
     public bool hasLife = true;
     public int lifeLeftF = 100;
     public float generatePossibility = 1.0f;
-    
-    public ElementGenerator.Option option = ElementGenerator.Option.quiet;
 
     public ElementSettings elementSettings;
 }
@@ -20,12 +18,6 @@ public class ElementGenerator : MonoBehaviour
     [SerializeField] private GameObject elementPrefab;
 
     public ElementGeneratorSettings settings;
-
-    public enum Option
-    {
-        quiet,
-        spreadRandom
-    }
 
     private void Start()
     {
@@ -68,15 +60,6 @@ public class ElementGenerator : MonoBehaviour
             elementObject.transform.position = this.transform.position;
             Element element = elementObject.GetComponent<Element>();
             element.settings = settings.elementSettings;
-
-            switch (settings.option)
-            {
-                case (Option.spreadRandom):
-                    Vector3 projectionSpeed = new Vector3(Random.RandomRange(0f, 1f),0,0);
-                    Quaternion angle = Quaternion.EulerAngles(0,0, Random.RandomRange(0f, 360f));
-                    elementObject.GetComponent<Rigidbody2D>().velocity = angle * projectionSpeed;
-                    break;
-            }
         }
     }
 }

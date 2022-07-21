@@ -88,11 +88,13 @@ public class Waterbender : Player
         {
             elementSettings = new ElementSettings()
             {
-                rigid = true
+                rigid = true,
+                option = Element.Option.spreadRandom,
+                optionA = 1.5f,
+                lifeLeft = 150
             },
             hasLife = false,
-            generatePossibility = 0.5f,
-            option = ElementGenerator.Option.spreadRandom
+            generatePossibility = 0.5f
         };
         generatorAttached = MakeGenerator(
                                     waterGeneratorPrefab,
