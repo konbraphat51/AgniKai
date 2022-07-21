@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9216095616670146246}
   - component: {fileID: 2625932037765441093}
-  - component: {fileID: 592333121531968260}
   - component: {fileID: 3267642524561934461}
   - component: {fileID: 5851318212716517863}
+  - component: {fileID: 8557314310336488851}
   m_Layer: 0
   m_Name: WaterElement
   m_TagString: ElementBullet
@@ -85,21 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &592333121531968260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3226912336126210477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d81f0fdc0c25a7c459dd3cd608ec8782, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeLeft: 300
-  playerN: 1
-  destroyHittingWall: 1
 --- !u!61 &3267642524561934461
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -147,3 +132,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8557314310336488851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226912336126210477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2389b022f158f04479b1bf8e26db9f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

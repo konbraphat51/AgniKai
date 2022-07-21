@@ -2,72 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class ElementGeneratorSettings
+{
+    public GameObject elementPrefab;
+    public GameObject parentObject;
+    public bool hasLife = true;
+    public int lifeLeftF = 100;
+    public float generatePossibility = 1.0f;
+    
+    public ElementGenerator.Option option = ElementGenerator.Option.quiet;
+
+    public ElementSettings elementSettings;
+}
+
 public class ElementGenerator : MonoBehaviour
 {
-    [SerializeField] public GameObject elementPrefab;
-    [SerializeField] public GameObject parentObject;
-    [SerializeField] public bool hasLife = true;
-    [SerializeField] public int lifeLeftF = 100;
-    [Tooltip(">1.0 is able; 5.0 means 5 per flame")]
-    [SerializeField] public float generatePossibility = 1.0f;
-    [SerializeField] public float projectionSpeed = 10f;
-    [SerializeField] public bool isElementHeavy = false;
-    [SerializeField] private float heavyGravity = 5.0f;
+    [SerializeField] private GameObject elementPrefab;
+
+    public ElementGeneratorSettings settings;
 
     public enum Option
     {
         quiet,
         spreadRandom
     }
-    public Option option = Option.quiet;
 
-    public int playerN = 1;
-
-
+    private void Start()
+    {
+        //if no prefab
+        if(settings.elementPrefab == null)
+        {
+            settings.elementPrefab = elementPrefab;
+        }
+    }
 
     void Update()
     {
         Generate();
 
-        lifeLeftF--;
-        if(hasLife && (lifeLeftF <= 0))
+        if (settings.hasLife)
         {
-            Destroy(this.gameObject);
+            settings.lifeLeftF--;
+            if (settings.hasLife && (settings.lifeLeftF <= 0))
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
     private void Generate()
     {
         //if possibility 4.7 => 4 must generated + one more by 0.7 chance
-        int generate_n = (int)generatePossibility;
-        if(Random.Range(0,1) < generatePossibility)
+        int generate_n = (int)settings.generatePossibility;
+        if(Random.Range(0,1) < settings.generatePossibility)
         {
             generate_n++;
         }
 
         for(int i = 0; i < generate_n; i++)
         {
-            GameObject elementObject = Instantiate(elementPrefab,
+            GameObject elementObject = Instantiate(settings.elementPrefab,
                 new Vector3(0,0,0),
                 Quaternion.identity,
-                parentObject.transform);
+                settings.parentObject.transform);
             elementObject.transform.position = this.transform.position;
             Element element = elementObject.GetComponent<Element>();
-            element.playerN = this.playerN;
+            element.settings = settings.elementSettings;
 
-            if (isElementHeavy)
+            switch (settings.option)
             {
-                elementObject.GetComponent<Rigidbody2D>().gravityScale = heavyGravity;
-            }
-
-            switch (option)
-            {
-                case Option.spreadRandom:
-                    Vector3 basic = new Vector3(projectionSpeed, 0, 0);
-                    Quaternion rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
-                    elementObject.GetComponent<Rigidbody2D>().velocity = rotation*basic;
+                case (Option.spreadRandom):
+                    Vector3 projectionSpeed = new Vector3(Random.RandomRange(0f, 1f),0,0);
+                    Quaternion angle = Quaternion.EulerAngles(0,0, Random.RandomRange(0f, 360f));
+                    elementObject.GetComponent<Rigidbody2D>().velocity = angle * projectionSpeed;
                     break;
             }
         }
     }
 }
+

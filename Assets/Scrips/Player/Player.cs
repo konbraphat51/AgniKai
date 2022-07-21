@@ -6,7 +6,10 @@ using UnityEngine.Events;
 //sprites always must look right
 public class Player : MonoBehaviour
 {
-    [SerializeField] protected int number = 1;
+    [SerializeField] private int __number = 1;
+    public int number { get; private set; }
+
+    public float hp { get; protected set; } = 1000;
 
     public bool shouldLookRight = true;
     protected bool hasLookPreference = false;
@@ -45,6 +48,8 @@ public class Player : MonoBehaviour
 
     protected virtual void Start()
     {
+        number = __number;
+
         animator = this.GetComponent<Animator>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
     }
@@ -56,6 +61,11 @@ public class Player : MonoBehaviour
         CheckKeys();
         Look();
         WaitForAnotherKey();
+    }
+
+    public void Damage(float damage)
+    {
+        hp -= damage;
     }
 
     private void CheckKeys()
