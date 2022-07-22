@@ -70,12 +70,14 @@ namespace Game
             gameObject.GetComponent<Collider2D>().isTrigger = settings.isTrigger;
 
             //ignored collision
-            foreach(GameObject obj in settings.collisionIgnored)
+            if(settings.collisionIgnored != null)
             {
-                Physics2D.IgnoreCollision(this.gameObject.GetComponent<Collider2D>(),
-                                            obj.GetComponent<Collider2D>());
+                foreach (GameObject obj in settings.collisionIgnored)
+                {
+                    Physics2D.IgnoreCollision(this.gameObject.GetComponent<Collider2D>(),
+                                                obj.GetComponent<Collider2D>());
+                }
             }
-
             //option
             switch (settings.option)
             {
